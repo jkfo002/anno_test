@@ -1,0 +1,3 @@
+/home/anno_test/ann_test/test/data/RNA_Seq/A157_RNA/A157-flower-1_R1.fq.gz	/home/anno_test/ann_test/test/data/RNA_Seq/A157_RNA/A157-flower-1_R2.fq.gz	flower	fr-unstranded	False
+/home/anno_test/ann_test/test/data/RNA_Seq/A157_RNA/A157-fruit-1_R1.fq.gz	/home/anno_test/ann_test/test/data/RNA_Seq/A157_RNA/A157-fruit-1_R2.fq.gz	fruit	fr-unstranded	False
+/home/anno_test/ann_test/test/data/RNA_Seq/A157_RNA/A157-leaf-1_R1.fq.gz	/home/anno_test/ann_test/test/data/RNA_Seq/A157_RNA/A157-leaf-1_R2.fq.gz	leaf	fr-unstranded	False
