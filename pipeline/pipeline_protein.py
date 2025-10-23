@@ -4,7 +4,7 @@ import os
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Protein completement')
-    parser.add_argument('-g', '--genome', type=str, help='Path to ortho.tsv', required=True)
+    parser.add_argument('-g', '--genome', type=str, help='Path to genome sequence', required=True)
     parser.add_argument('-i', '--input_gff', type=str, help='Path to input gff', required=True)
     parser.add_argument('-p', '--prefix', type=str, help='Prefix for output', required=True)
     parser.add_argument('-o', '--output_path', type=str, help='Path to output dir', required=True)
