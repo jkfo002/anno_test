@@ -1,43 +1,27 @@
-# 目录结构
-./data # 数据
-|-- PanPotato.proteins.clean.fa
-|-- RNA_Seq  # RNA Seq 数据
-|   |-- A157_RNA
-|   |   |-- A157-flower-1_R1.fq.gz
-|   |   |-- A157-flower-1_R2.fq.gz
-|   |   |-- A157-fruit-1_R1.fq.gz
-|   |   |-- A157-fruit-1_R2.fq.gz
-|   |   |-- ...
-|   `-- A157_RNA.sample # RNA Seq 数据表，用于mikado
-|-- busco # busco 数据库
-|   |-- embryophyta_odb12
-|   |-- eudicots_odb10
-|   |-- eukaryota_odb12
-|   `-- viridiplantae_odb12
-|-- genome # 基因组
-|   |-- A157.chr.fa
-|   `-- A157.chr.fa.fai # smatools index
-|-- gff # 测试注释文件
-|   `-- A157.H1.pasa.rename.gff
-|-- omark # omark 注释结果
-|   |-- LUCA.h5 -> /share/LUCA.h5
-|   `-- taxa.sqlite -> /root/.etetoolkit/taxa.sqlite
-`-- plant.yaml # mikado配置文件
+# anno_test
+用于评估基因结构注释质量的pipeline
 
-./pipeline # 脚本
-|-- pipeline_protein.py
-`-- pipeline_transcript.py
+# 准备数据
+```
+1. gff 测试gff
+2. genome gff对应物种基因组
+3. RNA_Seq 近缘物种转录组数据
+4. pep.fa 近缘物种蛋白数据
+```
 
 # 数据准备
 ## busco
+busco数据库
+```
 https://busco-data.ezlab.org/v5/data/lineages/eukaryota_odb12.2025-07-01.tar.gz
 https://busco-data.ezlab.org/v5/data/lineages/eudicots_odb10.2024-01-08.tar.gz
 https://busco-data.ezlab.org/v5/data/lineages/embryophyta_odb12.2025-07-01.tar.gz
 https://busco-data.ezlab.org/v5/data/lineages/viridiplantae_odb12.2025-07-01.tar.gz
+```
 ## omark init
-下载NCBI taxonomy数据
-https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
-需要ete3初始化（pixi protein 环境）
+omark需要[LUCA.h5](https://omabrowser.org/All/LUCA.h5)与NCBI[taxdump.tar.gz](https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz)数据
+
+下载NCBI taxonomy数据后需要ete3初始化（pixi protein 环境）
 ```python
 from ete3 import NCBITaxa
 ncbi = NCBITaxa(taxdump_file="/share/taxdump.tar.gz")
@@ -46,9 +30,13 @@ ncbi = NCBITaxa(taxdump_file="/share/taxdump.tar.gz")
 ```
 
 # pixi 环境
-分为protein与transcript环境，pixi配置文件`pixi.toml`，
+流程环境基于pixi搭建，分为protein与transcript环境，pixi配置文件`pixi.toml`，
+
 protein用于基于蛋白评估基因注释完整度，包括busco与omark
+
 transcript用于基于RNA-Seq评估基因注释完整度，包括mikado，mapping-back
+
+安装流程
 ```shell
 pixi install pixi.toml
 pixi shell -e protein
@@ -57,10 +45,8 @@ pixi shell -e transcript
 
 # 脚本
 
-./pipeline # 脚本
-|-- pipeline_protein.py
-`-- pipeline_transcript.py
 ## 蛋白
+```
 usage: pipeline_protein.py [-h] -g GENOME -i INPUT_GFF -p PREFIX -o OUTPUT_PATH [-t THREADS] [-b BUSCO] [-l BUSCO_LINEAGE] [-m OMARK]
                            [--omark_database OMARK_DATABASE] [--omark_taxa OMARK_TAXA]
 
@@ -88,7 +74,9 @@ options:
                         omark database, LUCA.h5
   --omark_taxa OMARK_TAXA
                         omark need NCBI taxa.sqlite, could convert from ete3
+```
 ## 转录本
+```
 usage: pipeline_transcript.py [-h] -g GENOME -i INPUT_GFF -p PREFIX -o OUTPUT_PATH [-t THREADS] -k MIKADO --mikado_sample MIKADO_SAMPLE --mikado_refprot
                               MIKADO_REFPROT [-c MAPPING_CDS]
 
@@ -114,6 +102,7 @@ optional arguments:
                         mikado prot db path (fa)
   -c MAPPING_CDS, --mapping_cds MAPPING_CDS
                         whether run mapping pipeline
+```
 ## 示例
 ```shell
 pixi run -e protein python ./pipeline/pipeline_protein.py \
